@@ -22,41 +22,40 @@ class TranslatorController
     private $request;
     private $logger;
 
-    public function __construct(Request $request, Translator $translator, $logger)
+
+	public function __construct(Request $request, Translator $translator, $logger)
     {
         $this->request = $request;
         $this->translator = $translator;
         $this->logger = $logger;
     }
 
-    public function getAction($id, $domain, $locale)
+
+	public function getAction($id, $domain, $locale)
     {
         $trans = $this->translator->trans($id, array(), $domain, $locale);
 
         return new Response($trans);
     }
 
+
     public function putAction()
     {
-        $translations = $this->request->request->get('trans');
+		$id     = $this->request->get('id');
+		$domain = $this->request->get('domain');
+		$locale = $this->request->get('locale');
+		$value  = $this->request->get('value');
 
-        foreach($translations as $trans) {
-            $id     = @$trans['id'];
-            $domain = @$trans['domain'];
-            $locale = @$trans['locale'];
-            $value  = @$trans['value'];
-
-            $error = null;
-            try {
-                $success = $this->translator->update($id, $value, $domain, $locale);
-                $trans = $value;
-            }
-            catch (InvalidTranslationKeyException $e) {
-                $success = false;
-                $trans = $this->translator->trans($id, array(), $domain, $locale);
-                $error = $e->getMessage();
-            }
-        }
+		$error = null;
+		try {
+			$success = $this->translator->update($id, $value, $domain, $locale);
+			$trans = $value;
+		}
+		catch (InvalidTranslationKeyException $e) {
+			$success = false;
+			$trans = $this->translator->trans($id, array(), $domain, $locale);
+			$error = $e->getMessage();
+		}
 
         return new Response(json_encode(array(
             'success' => $success,

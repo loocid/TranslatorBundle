@@ -23,29 +23,13 @@
         <service id="translator.dumper.yaml" class="Knp\Bundle\TranslatorBundle\Dumper\YamlDumper">
             <tag name="knplabs_translator.dumper"/>
         </service>
+
         <service id="translator.dumper.xliff" class="Knp\Bundle\TranslatorBundle\Dumper\XliffDumper">
             <tag name="knplabs_translator.dumper"/>
         </service>
+
         <service id="translator.dumper.csv" class="Knp\Bundle\TranslatorBundle\Dumper\CsvDumper">
             <tag name="knplabs_translator.dumper"/>
-        </service>
-
-        <service id="translator.response.listener.assets_injecter" class="Knp\Bundle\TranslatorBundle\Listener\ResponseListener" scope="request">
-            <argument type="service" id="templating.helper.assets" />
-            <argument type="service" id="router" />
-            <argument>%knplabs.translator.include_vendor_assets%</argument>
-            <tag name="kernel.event_listener" event="kernel.response" />
-        </service>
-
-        <service id="templating.helper.translator.writer" class="Knp\Bundle\TranslatorBundle\Templating\Helper\TranslatorHelper">
-            <tag name="templating.helper" alias="translator" />
-            <argument type="service" id="translator.writer" />
-        </service>
-
-        <service id="twig.extension.trans" class="Knp\Bundle\TranslatorBundle\Templating\Twig\TranslationExtension" public="false">
-            <tag name="twig.extension" />
-            <argument type="service" id="templating.helper.translator.writer" />
-            <argument type="service" id="translator" />
         </service>
     </services>
 </container>
